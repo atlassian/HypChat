@@ -123,15 +123,6 @@ class Room(RestObject):
 		if 'created' in self:
 			self['created'] = timestamp(self['created'])
 
-	# def save(self):
-	# 	data = {}
-	# 	for key in ('name', 'privacy', 'is_archived', 'is_guest_accessible', 'topic'):
-	# 		data[key] = self[key]
-	# 	data['owner'] = {
-	# 		'id': self['owner']['id']
-	# 	}
-	# 	return self._requests.put(self.url, data=data)
-
 	def message(self, *p, **kw):
 		"""
 		Redirects to the /notification URL.
