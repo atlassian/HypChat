@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division
+import json
 import requests
+
 
 class BearerAuth(requests.auth.AuthBase):
 	def __init__(self, token):

@@ -111,7 +111,7 @@ class RestObject(dict):
 		return self._requests.put(self.url, data=self).json()
 
 	def delete(self):
-		self._requests.delete(self.url)
+		return self._requests.delete(self.url)
 
 _at_mention = re.compile('@[\w]+(?: |$)')
 
@@ -123,14 +123,14 @@ class Room(RestObject):
 		if 'created' in self:
 			self['created'] = timestamp(self['created'])
 
-	def save(self):
-		data = {}
-		for key in ('name', 'privacy', 'is_archived', 'is_guest_accessible', 'topic'):
-			data[key] = self[key]
-		data['owner'] = {
-			'id': self['owner']['id']
-		}
-		self._requests.put(self.url, data=data)
+	# def save(self):
+	# 	data = {}
+	# 	for key in ('name', 'privacy', 'is_archived', 'is_guest_accessible', 'topic'):
+	# 		data[key] = self[key]
+	# 	data['owner'] = {
+	# 		'id': self['owner']['id']
+	# 	}
+	# 	return self._requests.put(self.url, data=data)
 
 	def message(self, *p, **kw):
 		"""
@@ -152,7 +152,7 @@ class Room(RestObject):
 		data = {'message': message, 'notify': notify, 'message_format': format}
 		if color:
 			data['color'] = color
-		self._requests.post(self.url+'/notification', data=data)
+		return self._requests.post(self.url+'/notification', data=data)
 
 	def topic(self, text):
 		"""
@@ -165,7 +165,7 @@ class Room(RestObject):
 	def history(self, date='recent', maxResults=200):
 		"""
 		Requests the room history.
-		
+
 		Note that if date is 'recent' (the default), HipChat will not return the complete history.
 		"""
 		tz = 'UTC'
@@ -180,7 +180,7 @@ class Room(RestObject):
 		return Linker._obj_from_text(resp.text, self._requests)
 
 	def invite(self, user, reason):
-		self._requests.post(self.url+'/invite/%s' % user['id'], data={
+		return self._requests.post(self.url+'/invite/%s' % user['id'], data={
 			'reason': reason,
 		})
 
@@ -323,7 +323,7 @@ class RoomCollection(RestObject, Collection):
 _urls_to_objects[re.compile(r'^https://api.hipchat.com/v2/room$')] = RoomCollection
 
 class WebhookCollection(RestObject, Collection):
-	def create(self, url, event, pattern=None, name=None):
+	def create(self, url, event, pattern=None, name='', email='', title='', mention_name='', is_group_admin=False, timezone='UTC', password=''):
 		"""
 		Creates a new webhook.
 		"""

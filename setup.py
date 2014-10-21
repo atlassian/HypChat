@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 def read_file(name):
     """
@@ -14,7 +14,7 @@ def read_file(name):
         f.close()
 
 setup(name='hypchat',
-      version='0.15',
+      version='0.15.2',
       description="Package for HipChat's v2 API",
       long_description=read_file('README.rst'),
       author='Riders Discount',
